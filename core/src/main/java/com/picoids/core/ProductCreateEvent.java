@@ -1,18 +1,22 @@
-package com.example.products;
+package com.picoids.core;
 
 import java.math.BigDecimal;
 
-public class ProductCreatedEvent {
+/**
+ * Simple DTO representing a product creation event that can be
+ * shared across services (e.g. producers and consumers).
+ */
+public class ProductCreateEvent {
 
     private String productId;
     private String title;
     private BigDecimal price;
     private Integer quantity;
 
-    public ProductCreatedEvent() {
+    public ProductCreateEvent() {
     }
 
-    public ProductCreatedEvent(String productId, String title, BigDecimal price, Integer quantity) {
+    public ProductCreateEvent(String productId, String title, BigDecimal price, Integer quantity) {
         this.productId = productId;
         this.title = title;
         this.price = price;
@@ -51,3 +55,4 @@ public class ProductCreatedEvent {
         this.quantity = quantity;
     }
 }
+
