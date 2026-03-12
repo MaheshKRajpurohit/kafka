@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
+import com.picoids.core.ProductCreateEvent;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -14,11 +15,13 @@ import java.util.concurrent.CompletableFuture;
 @Service
 public class ProductServiceImpl implements ProductService{
 
+
+
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    KafkaTemplate<String, ProductCreatedEvent> kafkaTemplate;
+    KafkaTemplate<String, ProductCreateEvent> kafkaTemplate;
 
-    public ProductServiceImpl(KafkaTemplate<String, ProductCreatedEvent> kafkaTemplate) {
+    public ProductServiceImpl(KafkaTemplate<String, ProductCreateEvent> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
@@ -30,12 +33,12 @@ public class ProductServiceImpl implements ProductService{
 
         String productId = UUID.randomUUID().toString();
 
-        ProductCreatedEvent productCreatedEvent = new ProductCreatedEvent(productId,
+        ProductCreateEvent productCreatedEvent = new ProductCreateEvent(productId,
                 productRestModel.getTitle(),
                 productRestModel.getPrice(),
                 productRestModel.getQuantity());
 
-        CompletableFuture<SendResult<String,ProductCreatedEvent>> future  = kafkaTemplate.send("product-created-events-topic",productId,productCreatedEvent);
+        CompletableFuture<SendResult<String,ProductCreateEvent>> future  = kafkaTemplate.send("product-created-events-topic",productId,productCreatedEvent);
 
         future.whenComplete((result,ex) -> {
             if(ex != null){

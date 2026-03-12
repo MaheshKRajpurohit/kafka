@@ -13,7 +13,7 @@ import java.util.UUID;
 @Service
 public class ProductServiceImpl implements ProductService{
 
-    KafkaTemplate<String,ProductCreateEvent > kafkaTemplate;
+    KafkaTemplate<String,ProductCreateEvent> kafkaTemplate;
 
     public ProductServiceImpl(KafkaTemplate<String, ProductCreateEvent> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
@@ -37,6 +37,7 @@ public class ProductServiceImpl implements ProductService{
 
              SendResult<String,ProductCreateEvent> result =
                     kafkaTemplate.send("product-created-synchronously-event-topic",productId,productCreateEvent).get();
+//        kafkaTemplate.send("insync-topic",productId,productCreateEvent).get();
                 log.info("Partition: "+ result.getRecordMetadata().partition());
                 log.info("Topic: " + result.getRecordMetadata().topic());
                 log.info("Ofset: " + result.getRecordMetadata().offset());
